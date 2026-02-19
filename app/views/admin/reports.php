@@ -1,0 +1,1 @@
+<h1>Admin Reports<a href="<?= SITE_URL ?>logout"><button>Logout</button></a></h1>

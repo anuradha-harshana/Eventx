@@ -1,0 +1,145 @@
+footer {
+    width: 100%;
+    background-color: #0b0c10; /* dark background */
+    color: #d1d5db;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 50px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.f-top {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+/* Logo section */
+.f-left {
+    flex: 1 1 250px;
+}
+
+.footer-logo {
+    height: 100px;
+    object-fit: contain;
+    transform: scale(2);
+    width: auto;
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+
+.f-left .intro {
+    font-size: 14px;
+    color: #b0b0b0;
+}
+
+/* Quick links */
+.f-middle {
+    flex: 1 1 200px;
+}
+
+.f-middle h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.f-middle ul {
+    list-style: none;
+    padding: 0;
+}
+
+.f-middle ul li {
+    margin-bottom: 12px;
+}
+
+.f-middle ul li a {
+    text-decoration: none;
+    color: #d1d5db;
+    transition: all 0.3s ease;
+}
+
+.f-middle ul li a:hover {
+    color: #00bcd4;
+    transform: translateX(5px);
+}
+
+/* Social links */
+.f-right {
+    flex: 1 1 200px;
+}
+
+.f-right h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.f-right ul {
+    list-style: none;
+    padding: 0;
+}
+
+.f-right ul li {
+    margin-bottom: 12px;
+}
+
+.f-right ul li a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #d1d5db;
+    transition: all 0.3s ease;
+}
+
+.f-right ul li a svg {
+    fill: #d1d5db;
+    transition: all 0.3s ease;
+}
+
+.f-right ul li a:hover {
+    color: #00bcd4;
+}
+
+.f-right ul li a:hover svg {
+    fill: #00bcd4;
+}
+
+/* Divider */
+hr {
+    border: 0;
+    border-top: 1px solid #2d2d2d;
+}
+
+/* Credits */
+.credits {
+    text-align: center;
+    font-size: 13px;
+    color: #888;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .f-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .f-left, .f-middle, .f-right {
+        flex: unset;
+    }
+
+    .footer-logo {
+        margin: 0 auto 15px;
+    }
+}

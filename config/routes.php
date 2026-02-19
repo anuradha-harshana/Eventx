@@ -1,0 +1,52 @@
+<?php 
+    return [
+
+        'GET' => [
+            '/' => 'ViewController@home',
+            '/login' => 'ViewController@showLoginForm',
+            '/register' => 'ViewController@showRegisterForm',
+            '/profile'=> 'AuthController@profile',
+            '/events' => 'eventController@index',
+            '/logout' => 'AuthController@logout',
+            '/adDash' => 'AdminController@dashboard',
+            '/adAna' => 'AdminController@analytics',
+            '/adRep' => 'AdminController@reports',
+            '/adSet' => 'AdminController@settings',
+            '/parDash' => 'ParticipantController@dashboard',
+            '/explore' => 'ViewController@explore',
+            '/myEvents' => 'ParticipantController@events',
+            '/parProf' => 'ParticipantController@profile',
+            '/orgDash' => 'OrganizerController@dashboard',
+            '/orgAna' => 'OrganizerController@analytics',
+            '/orgSpon' => 'OrganizerController@sponsors',
+            '/orgProf' => 'OrganizerController@profile',
+            '/createEvent' => 'OrganizerController@createEvent',
+            '/editEvent/{id}' => 'OrganizerController@editEvent',
+            '/sponDash' => 'SponsorController@dashboard',
+            '/sponAna' => 'SponsorController@analytics',
+            '/sponProf' => 'SponsorController@profile',
+            '/suppDash' => 'SupplierController@dashboard',
+            '/suppProf' => 'SupplierController@profile',
+            '/suppAna' => 'SupplierController@analytics',
+            '/addProduct' => 'SupplierController@addProduct',
+            '/editProduct/{id}' => 'SupplierController@editProduct',
+        ],
+
+        'POST' => [
+            '/logindata' => 'AuthController@login',
+            '/registerdata' => 'AuthController@register',
+            '/profile/update' => 'AuthController@updateProfile',
+            '/organizer/update' => 'OrganizerController@updateProfile',
+            '/participant/update' => 'ParticipantController@updateProfile',
+            '/sponsor/update' => 'SponsorController@updateProfile',
+            '/supplier/update' => 'SupplierController@updateProfile',
+            '/organizer/createEvent' => 'EventController@createEvent',
+            '/organizer/editEvent' => 'EventController@editEvent',
+            '/organizer/deleteEvent' => 'EventController@deleteEvent',
+            '/supplier/createProduct' => 'SupplierController@createProduct',
+            '/supplier/updateProduct' => 'SupplierController@updateProduct',
+            '/supplier/deleteProduct' => 'SupplierController@deleteProduct',
+            '/viewEvent' => 'ViewController@viewEvent',
+        ]
+    ]
+?>
