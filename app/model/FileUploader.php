@@ -55,6 +55,18 @@ class FileUploader {
 
         $relativeDir = str_replace('\\', '/', $relativeDir);
 
+        // Fallback for macOS / Linux: if the project root strip did not produce a clean
+        // relative path (e.g. realpath returned false or the prefix was not found),
+        // extract the relative portion directly from the upload directory string.
+        if (PHP_OS_FAMILY !== 'Windows' &&
+            !empty($relativeDir) &&
+            !str_starts_with($relativeDir, '/uploads') &&
+            !str_starts_with($relativeDir, 'uploads')
+        ) {
+            preg_match('#(uploads/[^/]+/?)#', str_replace('\\', '/', $absoluteUploadDir ?? $this->uploadDir), $matches);
+            $relativeDir = isset($matches[1]) ? '/' . rtrim($matches[1], '/') : '/uploads';
+        }
+
         return rtrim($relativeDir, '/') . '/' . $filename;
     }
 
