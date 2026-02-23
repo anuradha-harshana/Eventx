@@ -33,6 +33,6 @@
         <label>Product Pic</label>
         <input type="file" name="image_url"> 
 
-        <button type="submit">Update</button>
+        <button type="submit">Create</button>
     </div>
 </form>

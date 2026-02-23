@@ -11,77 +11,69 @@
 </head>
 <body>
 
-<main class="explore-page">
+<main class="explore-wrapper">
 
 <div class="container">
 
-    <header class="explore-header">
-        <h1>Explore Events</h1>
-        <p>Discover experiences happening around you</p>
+    <header class="page-header">
+        <h1>Events in Your Area</h1>
+        <p>Explore what's happening near you</p>
     </header>
 
-    <!-- Controls -->
-    <div class="explore-controls">
+    <!-- FILTER BAR -->
+    <div class="filter-row">
 
-        <input type="text" placeholder="Search events..." class="search-input">
+        <input type="text" placeholder="Search events" class="search-input">
 
-        <select class="filter-select">
+        <select>
             <option>All Categories</option>
             <option>Tech</option>
             <option>Business</option>
             <option>Music</option>
         </select>
 
-        <select class="filter-select">
-            <option>Sort by Date</option>
-            <option>Most Popular</option>
-            <option>Newest</option>
+        <select>
+            <option>Date</option>
+            <option>Today</option>
+            <option>This Week</option>
+            <option>This Month</option>
         </select>
 
     </div>
 
-    <!-- Events Grid -->
+    <!-- EVENTS GRID -->
     <div class="events-grid">
 
         <?php foreach ($events as $event): ?>
-
         <div class="event-card">
 
             <div class="event-image">
                 <img src="<?= SITE_URL . ltrim($event['banner_url'], '/') ?>" alt="">
             </div>
 
-            <div class="event-content">
-                <h3><?= htmlspecialchars($event['title']) ?></h3>
+            <div class="event-info">
 
-                <div class="meta-group">
-                    <span>📍 <?= htmlspecialchars($event['location_text']) ?></span>
-                    <span>📅 <?= date("F j, Y", strtotime($event['start_at'])) ?></span>
+                <div class="event-date">
+                    <?= strtoupper(date("M", strtotime($event['start_at']))) ?>
+                    <span><?= date("d", strtotime($event['start_at'])) ?></span>
                 </div>
 
-                <div class="card-footer">
-                    <span class="capacity"><?= $event['capacity'] ?> seats</span>
+                <div class="event-details">
+                    <h3><?= htmlspecialchars($event['title']) ?></h3>
+                    <p class="location"><?= htmlspecialchars($event['location_text']) ?></p>
+                    <p class="capacity"><?= $event['capacity'] ?> seats available</p>
 
                     <form method="POST" action="<?= SITE_URL ?>viewEvent">
                         <input type="hidden" value="<?= htmlspecialchars($event['id']) ?>" name="id">
-                        <button class="view" type="submit">View Event</button>
+                        <button type="submit" class="btn-view">View Event</button>
                     </form>
                 </div>
+
             </div>
 
         </div>
-
         <?php endforeach; ?>
 
-    </div>
-
-    <!-- Pagination -->
-    <div class="pagination">
-        <button>Previous</button>
-        <button class="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>Next</button>
     </div>
 
 </div>

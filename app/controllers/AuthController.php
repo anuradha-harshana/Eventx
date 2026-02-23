@@ -81,12 +81,6 @@
             $this->view('profile',['user'=>$user]);
         }
 
-        public function updateProfile() {
-            Middleware::auth();
-            $this->userModel->updateProfile($_SESSION['user_id'],$_POST,$_FILES['profile_pic'] ?? null);
-            header('Location: '.SITE_URL.'/profile');
-        }
-
     }
 
 ?>

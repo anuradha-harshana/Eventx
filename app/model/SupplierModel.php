@@ -140,11 +140,11 @@
 
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
-         public function updateProduct($productId, $supplierId, $data, $imageUrl = null){
+         public function updateProducts($productId, $supplierId, $data, $imageUrl = null){
             $fields = [];
             $params = [
                 'id' => $productId,
-                'organizer_id' => $supplierId
+                'supplier_id' => $supplierId
             ];
 
             if(isset($data['name'])){

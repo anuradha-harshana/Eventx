@@ -99,12 +99,12 @@
                 } catch (Exception $e) {
                     // Handle upload error gracefully
                     $_SESSION['upload_error'] = $e->getMessage();
-                    header('Location: ' . SITE_URL . 'orgDash');
+                    header('Location: ' . SITE_URL . 'suppDash');
                     exit;
                 }
             }
 
-            $this->suppModel->updateProduct($supplierId, $_POST, $imageUrl);
+            $this->suppModel->updateProducts($supplierId, $_POST, $imageUrl);
 
             header('Location: ' . SITE_URL . 'suppDash');
             exit;

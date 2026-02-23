@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="<?php echo SITE_URL; ?>assets/css/style.css" />
+<link rel="stylesheet" href="<?php echo SITE_URL; ?>/assets/css/style.css" />
 
 <section id="home" class="hero">
     <div class="hero-section">

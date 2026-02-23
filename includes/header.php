@@ -38,6 +38,11 @@ if ($current_route === '' || $current_route === 'Eventx') {
                     <li><a class="nav-item <?= $current_route === 'adRep' ? 'active' : '' ?>" href="<?= SITE_URL ?>adRep">Reports</a></li>
                     <li><a class="nav-item <?= $current_route === 'adSet' ? 'active' : '' ?>" href="<?= SITE_URL ?>adSet">Settings</a></li>
                 </ul>
+                <div class="nav-buttons">
+                        <a href="<?= SITE_URL ?>logout">
+                            <button class="btn-main">Logout</button>
+                        </a>
+                </div>
 
             <?php elseif($_SESSION['role'] === 'participant'): ?>
                 <ul class="nav-list">
@@ -46,6 +51,11 @@ if ($current_route === '' || $current_route === 'Eventx') {
                     <li><a class="nav-item <?= $current_route === 'myEvents' ? 'active' : '' ?>" href="<?= SITE_URL ?>myEvents">My Events</a></li>
                     <li><a class="nav-item <?= $current_route === 'parProf' ? 'active' : '' ?>" href="<?= SITE_URL ?>parProf">Profile</a></li>
                 </ul>
+                <div class="nav-buttons">
+                        <a href="<?= SITE_URL ?>logout">
+                            <button class="btn-main">Logout</button>
+                        </a>
+                </div>
 
             <?php elseif($_SESSION['role'] === 'organizer'): ?>
                 <ul class="nav-list">
@@ -56,6 +66,11 @@ if ($current_route === '' || $current_route === 'Eventx') {
                     <li><a class="nav-item <?= $current_route === 'orgAna' ? 'active' : '' ?>" href="<?= SITE_URL ?>orgAna">Analytics</a></li>
                     <li><a class="nav-item <?= $current_route === 'orgProf' ? 'active' : '' ?>" href="<?= SITE_URL ?>orgProf">Profile</a></li>
                 </ul>
+                <div class="nav-buttons">
+                        <a href="<?= SITE_URL ?>logout">
+                            <button class="btn-main">Logout</button>
+                        </a>
+                </div>
 
             <?php elseif($_SESSION['role'] === 'sponsor'): ?>
                 <ul class="nav-list">
@@ -65,6 +80,11 @@ if ($current_route === '' || $current_route === 'Eventx') {
                     <li><a class="nav-item <?= $current_route === 'sponAna' ? 'active' : '' ?>" href="<?= SITE_URL ?>sponAna">Analytics</a></li>
                     <li><a class="nav-item <?= $current_route === 'sponProf' ? 'active' : '' ?>" href="<?= SITE_URL ?>sponProf">Profile</a></li>
                 </ul>
+                <div class="nav-buttons">
+                        <a href="<?= SITE_URL ?>logout">
+                            <button class="btn-main">Logout</button>
+                        </a>
+                </div>
 
             <?php elseif($_SESSION['role'] === 'supplier'): ?>
                 <ul class="nav-list">
@@ -74,6 +94,12 @@ if ($current_route === '' || $current_route === 'Eventx') {
                     <li><a class="nav-item <?= $current_route === 'suppAna' ? 'active' : '' ?>" href="<?= SITE_URL ?>suppAna">Analytics</a></li>
                     <li><a class="nav-item <?= $current_route === 'suppProf' ? 'active' : '' ?>" href="<?= SITE_URL ?>suppProf">Profile</a></li>
                 </ul>
+                <div class="nav-buttons">
+                        <a href="<?= SITE_URL ?>logout">
+                            <button class="btn-main">Logout</button>
+                        </a>
+                </div>
+                
             <?php endif; ?>
 
         <?php else: ?>
@@ -83,22 +109,15 @@ if ($current_route === '' || $current_route === 'Eventx') {
                 <li><a class="nav-item" href="<?= SITE_URL ?>#about">About</a></li>
                 <li><a class="nav-item" href="<?= SITE_URL ?>#contact">Contact</a></li>
             </ul>
-        <?php endif; ?>
-
             <div class="nav-buttons">
-                <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="<?= SITE_URL ?>logout">
-                        <button class="btn-main">Logout</button>
-                    </a>
-                <?php else: ?>
                     <a href="<?= SITE_URL ?>login">
                         <button class="btn-outline">Login</button>
                     </a>
                     <a href="<?= SITE_URL ?>register">
                         <button class="btn-main">Signup</button>
                     </a>
-                <?php endif; ?>
             </div>
+        <?php endif; ?>
 
             <div class="nav-toggle" onclick="toggleMobileMenu()">
                 <span></span>

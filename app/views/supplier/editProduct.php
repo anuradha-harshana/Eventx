@@ -4,6 +4,7 @@
     <div class="organizer-details">
         <img src="<?= htmlspecialchars(SITE_URL.ltrim($product['image_url'], '/') ?? '/assets/images/default-profile.png') ?>" alt="Profile Picture" class="profile-pic">
          <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
+         <h1><?= $product['id'] ?></h1>
         
          <label>Product Name</label>
         <input type="text" placeholder="Jason Goods" name="name" value="<?= htmlspecialchars($product['name']) ?>">
@@ -25,7 +26,7 @@
             <option value="<?= htmlspecialchars($product['category_id']) ?>">Select Category</option>
 
             <?php foreach($categories as $category): ?>
-                <option value="<?= $category['id'] ?>">
+                <option value="">
                     <?= htmlspecialchars($category['name']) ?>
                 </option>
             <?php endforeach; ?>
@@ -37,4 +38,3 @@
 
         <button type="submit">Update</button>
     </div>
-</form>
