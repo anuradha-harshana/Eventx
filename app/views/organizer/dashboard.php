@@ -20,12 +20,12 @@
         </div>
 
         <div class="stat-card">
-            <h3><?= $stats['published_events'] ?? 0 ?></h3>
+            <h3><?= $stats['published_count'] ?? 0 ?></h3>
             <p>Published</p>
         </div>
 
         <div class="stat-card">
-            <h3><?= $stats['draft_events'] ?? 0 ?></h3>
+            <h3><?= $stats['draft_count'] ?? 0 ?></h3>
             <p>Drafts</p>
         </div>
     </section>
