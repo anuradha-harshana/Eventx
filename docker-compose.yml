@@ -1,0 +1,67 @@
+services:
+
+  # ── Web (PHP 8.2 + Apache) ──────────────────────────────────────────────────
+  web:
+    build: .
+    container_name: eventx_web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      # Database – point at the 'db' service name inside Docker
+      DB_HOST: db
+      DB_NAME: eventx_db
+      DB_USER: eventx_user
+      DB_PASS: eventx_pass
+      # Keeps SITE_URL consistent with the /Eventx alias in apache.conf
+      SITE_URL: "http://localhost:8080/Eventx/"
+    volumes:
+      # Persist uploaded files across container rebuilds
+      - ./uploads:/var/www/html/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ── Database (MySQL 8.0) ─────────────────────────────────────────────────────
+  db:
+    image: mysql:8.0
+    container_name: eventx_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: eventx_db
+      MYSQL_USER: eventx_user
+      MYSQL_PASSWORD: eventx_pass
+    volumes:
+      # Named volume – data survives container removal / upgrades
+      - db_data:/var/lib/mysql
+      # Mount the whole init/ folder – MySQL runs all .sql files alphabetically on first boot
+      - ./init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    ports:
+      # Expose only if you need direct host access; remove in production
+      - "3307:3306"
+
+  # ── phpMyAdmin ───────────────────────────────────────────────────────────────
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: eventx_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8081:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  db_data:
+    driver: local
