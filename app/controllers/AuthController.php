@@ -68,15 +68,12 @@
         }
 
         public function logout() {
-
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
-
             session_unset();
             session_destroy();
-            
-            header('Location: ' . SITE_URL . 'login');
+            header('Location: '.SITE_URL.'login');
         }
 
         public function profile() {

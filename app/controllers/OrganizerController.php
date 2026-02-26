@@ -19,11 +19,8 @@ class OrganizerController extends Controller {
 
         $events = $this->eventModel->getEventsByOrganizer($organizerId);
 
-        $stats = $this->eventModel->getEventStatsByOrganizer($organizerId);
-
         $this->view('organizer/dashboard', [
-            'events' => $events,
-            'stats' => $stats
+            'events' => $events
         ]);
     }
 

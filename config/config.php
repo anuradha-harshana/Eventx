@@ -10,7 +10,7 @@
     define('SITE_NAME', 'EVENTZ');
     define('SITE_URL', 'http://localhost/Eventx/');
     define('ROOT', __DIR__ . '/..');
-    define('DB_HOST', 'db');
+    define('DB_HOST', 'localhost');
     define('DB_NAME', 'eventx_db');
     define('DB_USER', 'root');
     define('DB_PASS', '');
