@@ -11,9 +11,9 @@ class EventModel {
     public function createEvent($organizerId, $data, $bannerPic = null){
         $stmt = $this->db->prepare("
             INSERT INTO events 
-            (organizer_id, title, description, category_id, location_text, start_at, end_at, capacity, status, banner_url) 
+            (organizer_id, title, description, category_id, location_text, location_map, start_at, end_at, capacity, status, banner_url) 
             VALUES 
-            (:organizer_id, :title, :description, :category_id, :location_text, :start_at, :end_at, :capacity, :status, :banner_url)
+            (:organizer_id, :title, :description, :category_id, :location_text, :location_link, :start_at, :end_at, :capacity, :status, :banner_url)
         ");
 
         return $stmt->execute([
@@ -22,6 +22,7 @@ class EventModel {
             'description' => $data['description'],
             'category_id' => $data['category_id'],
             'location_text' => $data['location_text'],
+            'location_link' => $data['location_link'],
             'start_at' => $data['start_at'],
             'end_at' => $data['end_at'],
             'capacity' => $data['capacity'],

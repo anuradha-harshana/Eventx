@@ -82,4 +82,26 @@ class EventController extends Controller {
         exit;
     }
 
+    public function manageEvent($id = null)
+    {
+        $id = (int) $id;
+
+        if ($id <= 0) {
+            header('Location: ' . SITE_URL . 'orgDash');
+            exit;
+        }
+
+        $organizerId = $this->getOrganizerId();
+
+        // getEventById requires both eventId AND organizerId
+        $event = $this->eventModel->getEventById($id, $organizerId);
+
+        if (!$event) {
+            header('Location: ' . SITE_URL . 'orgDash');
+            exit;
+        }
+
+        $this->view('organizer/manageEvent', ['event' => $event]);
+    }
+
 }

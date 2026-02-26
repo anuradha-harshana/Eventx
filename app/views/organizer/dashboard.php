@@ -70,6 +70,10 @@
                                     onclick="confirmDelete(<?= $event['id'] ?>)">
                                     Delete
                                 </button>
+                                <button class="btn-small danger"
+                                    onclick="goToManageEvent(<?= $event['id'] ?>)">
+                                    Manage
+                                </button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -93,4 +97,4 @@
     <input type="hidden" name="event_id" id="deleteEventId">
 </form>
 
-<script src="<?= SITE_URL ?>/assets/js/deleteEvent.js"></script>
+<script src="<?= SITE_URL ?>/assets/js/eventActions.js"></script>

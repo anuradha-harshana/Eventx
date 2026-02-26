@@ -10,3 +10,9 @@ function confirmDelete(eventId)
 
     document.getElementById("deleteEventForm").submit();
 }
+
+function goToManageEvent(eventId){
+    if (!eventId) return;
+    const id = encodeURIComponent(String(eventId));  
+    window.location.href = `${SITE_URL}manageEvent/${id}`;
+}

@@ -17,6 +17,11 @@ if ($current_route === '' || $current_route === 'Eventx') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= SITE_NAME; ?> - Event Management Platform</title>
     <link rel="stylesheet" href="<?= SITE_URL ?>assets/css/navbar.css">
+    
+    <!-- declare site url for js functions-->
+    <script>const SITE_URL = "<?= SITE_URL ?>";</script>
+   
+
 </head>
 
 <body>

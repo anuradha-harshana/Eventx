@@ -30,6 +30,9 @@
             '/suppAna' => 'SupplierController@analytics',
             '/addProduct' => 'SupplierController@addProduct',
             '/editProduct/{id}' => 'SupplierController@editProduct',
+
+            //organizer
+            '/manageEvent/{id}' => 'EventController@manageEvent',
         ],
 
         'POST' => [
