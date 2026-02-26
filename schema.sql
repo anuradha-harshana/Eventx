@@ -280,14 +280,20 @@ CREATE TABLE IF NOT EXISTS sponsorships (
     sponsor_id INT NOT NULL,
     amount DECIMAL(10,2) DEFAULT NULL,
     resources TEXT DEFAULT NULL,
-    status ENUM('pending', 'approved', 'rejected', 'completed') DEFAULT 'pending',
+    status ENUM('pending', 'approved', 'rejected', 'completed', 'negotiating') DEFAULT 'pending',
     branding_level ENUM('platinum', 'gold', 'silver', 'bronze', 'basic') DEFAULT 'basic',
     contract_file VARCHAR(255) DEFAULT NULL,
+    sponsor_notes TEXT DEFAULT NULL,
+    organizer_notes TEXT DEFAULT NULL,
+    requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    responded_at TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
     FOREIGN KEY (sponsor_id) REFERENCES sponsor_details(id) ON DELETE CASCADE,
-    INDEX idx_status (status)
+    INDEX idx_status (status),
+    INDEX idx_sponsor_id (sponsor_id),
+    INDEX idx_created_at (created_at)
 );
 
 -- SPONSOR PORTFOLIO
@@ -295,14 +301,20 @@ CREATE TABLE IF NOT EXISTS sponsor_portfolio (
     id INT AUTO_INCREMENT PRIMARY KEY,
     sponsor_id INT NOT NULL,
     title VARCHAR(100) NOT NULL,
-    description TEXT DEFAULT NULL,
+    brand_description TEXT DEFAULT NULL,
+    sponsorship_category VARCHAR(100) DEFAULT NULL,
+    past_collaboration VARCHAR(255) DEFAULT NULL,
+    logo_url VARCHAR(255) DEFAULT NULL,
+    banner_url VARCHAR(255) DEFAULT NULL,
     image_url VARCHAR(255) DEFAULT NULL,
     event_name VARCHAR(100) DEFAULT NULL,
     year YEAR DEFAULT NULL,
     status ENUM('pending', 'approved', 'rejected') DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (sponsor_id) REFERENCES sponsor_details(id) ON DELETE CASCADE
+    FOREIGN KEY (sponsor_id) REFERENCES sponsor_details(id) ON DELETE CASCADE,
+    INDEX idx_sponsor_id (sponsor_id),
+    INDEX idx_created_at (created_at)
 );
 
 -- ============================================

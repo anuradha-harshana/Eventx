@@ -18,10 +18,39 @@
             $this->view('register');
         }
         public function explore(){
+            $filter = $_GET['filter'] ?? 'all';
+            $category = $_GET['category'] ?? null;
+            $location = $_GET['location'] ?? null;
+            $search = $_GET['search'] ?? null;
             
-            $events = $this->eventModel->getEvents();
+            $events = [];
+            $categories = $this->eventModel->getCategories();
+            
+            // Apply filters
+            if($search){
+                $events = $this->eventModel->searchEvents($search);
+            } elseif($category){
+                $events = $this->eventModel->getEventsByCategory($category);
+            } elseif($location){
+                $events = $this->eventModel->getEventsByLocation($location);
+            } elseif($filter === 'upcoming'){
+                $events = $this->eventModel->getUpcomingEvents();
+            } elseif($filter === 'past'){
+                $events = $this->eventModel->getPastEvents();
+            } elseif($filter === 'popular'){
+                $events = $this->eventModel->getPopularEvents();
+            } else {
+                // Default: all upcoming events
+                $events = $this->eventModel->getUpcomingEvents();
+            }
+            
             $this->view('explore', [
-                'events' => $events
+                'events' => $events,
+                'categories' => $categories,
+                'activeFilter' => $filter,
+                'selectedCategory' => $category,
+                'selectedLocation' => $location,
+                'searchTerm' => $search
             ]); 
         }
 

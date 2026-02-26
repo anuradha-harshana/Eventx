@@ -185,4 +185,184 @@ class EventModel {
             'organizer_id' => $organizerId
         ]);
     }
+
+    /**
+     * Get upcoming events (after current date)
+     * @param int|null $limit - Limit results
+     * @return array
+     */
+    public function getUpcomingEvents($limit = null){
+        $sql = "
+            SELECT 
+                e.id,
+                e.title,
+                e.banner_url,
+                e.location_text,
+                e.start_at,
+                e.end_at,
+                e.capacity,
+                e.current_participants,
+                e.created_at,
+                c.name AS category_name
+            FROM events e
+            JOIN categories c ON e.category_id = c.id
+            WHERE e.status = 'published' AND e.start_at > NOW()
+            ORDER BY e.start_at ASC
+        ";
+        
+        if($limit) $sql .= " LIMIT $limit";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get past events (before current date)
+     * @param int|null $limit - Limit results
+     * @return array
+     */
+    public function getPastEvents($limit = null){
+        $sql = "
+            SELECT 
+                e.id,
+                e.title,
+                e.banner_url,
+                e.location_text,
+                e.start_at,
+                e.end_at,
+                e.capacity,
+                e.current_participants,
+                e.created_at,
+                c.name AS category_name
+            FROM events e
+            JOIN categories c ON e.category_id = c.id
+            WHERE e.status = 'published' AND e.start_at <= NOW()
+            ORDER BY e.start_at DESC
+        ";
+        
+        if($limit) $sql .= " LIMIT $limit";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get events by category
+     * @param int $categoryId - Category ID
+     * @return array
+     */
+    public function getEventsByCategory($categoryId){
+        $stmt = $this->db->prepare("
+            SELECT 
+                e.id,
+                e.title,
+                e.banner_url,
+                e.location_text,
+                e.start_at,
+                e.end_at,
+                e.capacity,
+                e.current_participants,
+                e.created_at,
+                c.name AS category_name
+            FROM events e
+            JOIN categories c ON e.category_id = c.id
+            WHERE e.status = 'published' AND e.category_id = :category_id AND e.start_at > NOW()
+            ORDER BY e.start_at ASC
+        ");
+
+        $stmt->execute(['category_id' => $categoryId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get events by location
+     * @param string $location - Location text
+     * @return array
+     */
+    public function getEventsByLocation($location){
+        $stmt = $this->db->prepare("
+            SELECT 
+                e.id,
+                e.title,
+                e.banner_url,
+                e.location_text,
+                e.start_at,
+                e.end_at,
+                e.capacity,
+                e.current_participants,
+                e.created_at,
+                c.name AS category_name
+            FROM events e
+            JOIN categories c ON e.category_id = c.id
+            WHERE e.status = 'published' AND e.location_text LIKE :location AND e.start_at > NOW()
+            ORDER BY e.start_at ASC
+        ");
+
+        $stmt->execute(['location' => '%' . trim($location) . '%']);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get popular events (by participant count)
+     * @param int|null $limit - Limit results
+     * @return array
+     */
+    public function getPopularEvents($limit = null){
+        $sql = "
+            SELECT 
+                e.id,
+                e.title,
+                e.banner_url,
+                e.location_text,
+                e.start_at,
+                e.end_at,
+                e.capacity,
+                e.current_participants,
+                e.created_at,
+                c.name AS category_name
+            FROM events e
+            JOIN categories c ON e.category_id = c.id
+            WHERE e.status = 'published' AND e.start_at > NOW()
+            ORDER BY e.current_participants DESC, e.start_at ASC
+        ";
+        
+        if($limit) $sql .= " LIMIT $limit";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Search events by keyword
+     * @param string $keyword - Search keyword
+     * @return array
+     */
+    public function searchEvents($keyword){
+        $stmt = $this->db->prepare("
+            SELECT 
+                e.id,
+                e.title,
+                e.banner_url,
+                e.location_text,
+                e.start_at,
+                e.end_at,
+                e.capacity,
+                e.current_participants,
+                e.created_at,
+                c.name AS category_name
+            FROM events e
+            JOIN categories c ON e.category_id = c.id
+            WHERE e.status = 'published' 
+                AND (e.title LIKE :keyword OR e.description LIKE :keyword OR e.location_text LIKE :keyword)
+                AND e.start_at > NOW()
+            ORDER BY e.start_at ASC
+        ");
+
+        $searchTerm = '%' . trim($keyword) . '%';
+        $stmt->execute(['keyword' => $searchTerm]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }

@@ -77,6 +77,9 @@ if ($current_route === '' || $current_route === 'Eventx') {
                     <li><a class="nav-item <?= $current_route === 'sponDash' ? 'active' : '' ?>" href="<?= SITE_URL ?>sponDash">Dashboard</a></li>
                     <li><a class="nav-item <?= $current_route === 'explore' ? 'active' : '' ?>" href="<?= SITE_URL ?>explore">Explore</a></li>
                     <li><a class="nav-item <?= $current_route === 'market' ? 'active' : '' ?>" href="<?= SITE_URL ?>market">Market</a></li>
+                    <li><a class="nav-item <?= in_array($current_route, ['sponFundEvent', 'sponMySponsorships', 'sponSponsor']) ? 'active' : '' ?>" href="<?= SITE_URL ?>sponFundEvent">Promote</a></li>
+                    <li><a class="nav-item <?= in_array($current_route, ['sponRequests', 'sponRequest']) ? 'active' : '' ?>" href="<?= SITE_URL ?>sponRequests">Requests</a></li>
+                    <li><a class="nav-item <?= $current_route === 'sponPortfolio' ? 'active' : '' ?>" href="<?= SITE_URL ?>sponPortfolio">Portfolio</a></li>
                     <li><a class="nav-item <?= $current_route === 'sponAna' ? 'active' : '' ?>" href="<?= SITE_URL ?>sponAna">Analytics</a></li>
                     <li><a class="nav-item <?= $current_route === 'sponProf' ? 'active' : '' ?>" href="<?= SITE_URL ?>sponProf">Profile</a></li>
                 </ul>
