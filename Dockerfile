@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# ── System dependencies ────────────────────────────────────────────────────────
+# ── System dependencies ─────────────────────────────────────────────
 RUN apt-get update && apt-get install -y \
         libpng-dev \
         libjpeg-dev \
@@ -9,22 +9,19 @@ RUN apt-get update && apt-get install -y \
         unzip \
     && rm -rf /var/lib/apt/lists/*
 
-# ── PHP extensions ─────────────────────────────────────────────────────────────
-RUN docker-php-ext-install mysqli pdo_mysql
+# ── PHP Extensions ───────────────────────────────────────────────────
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# ── Apache: enable mod_rewrite ─────────────────────────────────────────────────
+# ── Enable Apache mod_rewrite ────────────────────────────────────────
 RUN a2enmod rewrite
+RUN sed -i '/<Directory \/var\/www\/>/,/<\/Directory>/ s/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 
-# ── Custom VirtualHost (mirrors /Eventx path so .htaccess needs no changes) ───
+
+# ── Disable OPcache for development (important for live updates) ────
+RUN echo "opcache.enable=0" >> /usr/local/etc/php/conf.d/opcache.ini
 COPY docker/apache.conf /etc/apache2/sites-available/000-default.conf
 
-# ── Application code ───────────────────────────────────────────────────────────
+# ── Set working directory ────────────────────────────────────────────
 WORKDIR /var/www/html
-COPY . .
-
-# ── Permissions for upload directories ────────────────────────────────────────
-RUN mkdir -p uploads/events uploads/products uploads/profile \
-    && chown -R www-data:www-data /var/www/html \
-    && find /var/www/html/uploads -type d -exec chmod 755 {} \;
 
 EXPOSE 80
