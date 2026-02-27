@@ -97,6 +97,21 @@ class EventModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getEventsStatusByOrganizer($organizerId){
+            $stmt = $this->db->prepare("
+            SELECT 
+                COUNT(*) AS total_events,
+                SUM(CASE WHEN status = 'published' THEN 1 ELSE 0 END) AS published_events,
+                SUM(CASE WHEN status = 'draft' THEN 1 ELSE 0 END) AS draft_events
+            FROM events
+            WHERE organizer_id = :organizer_id
+        ");
+
+        $stmt->execute(['organizer_id' => $organizerId]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getCategories()
         {
             $stmt = $this->db->prepare("
