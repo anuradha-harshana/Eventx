@@ -14,7 +14,7 @@
             '/adSet' => 'AdminController@settings',
             '/parDash' => 'ParticipantController@dashboard',
             '/explore' => 'ViewController@explore',
-            '/myEvents' => 'ParticipantController@events',
+            '/myEvents' => 'ParticipantController@getRegisteredEvents',
             '/parProf' => 'ParticipantController@profile',
             '/orgDash' => 'OrganizerController@dashboard',
             '/orgAna' => 'OrganizerController@analytics',
@@ -47,6 +47,9 @@
             '/supplier/updateProduct' => 'SupplierController@updateProduct',
             '/supplier/deleteProduct' => 'SupplierController@deleteProduct',
             '/viewEvent' => 'ViewController@viewEvent',
+            '/registration' => 'ParticipantController@registration',
+            '/register' => 'RegistrationController@register',
+            '/cancel' => 'RegistrationController@cancel'
         ]
     ]
 ?>

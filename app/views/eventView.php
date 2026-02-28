@@ -52,29 +52,40 @@
         </div>
 
         <!-- RIGHT SIDEBAR -->
-        <aside class="event-sidebar">
+        <?php if($_SESSION['role'] === 'participant'): ?>
+            <aside class="event-sidebar">
 
-            <div class="ticket-card">
+                <div class="ticket-card">
 
-                <div class="ticket-price">
-                    Free
+                    <div class="ticket-price">
+                        Free
+                    </div>
+
+                    <div class="ticket-info">
+                        <?= $event['capacity'] ?> spots available
+                    </div>
+
+                    <form id="register-form">
+                        <input type="hidden" id="event_id" value="<?= $event['id'] ?>">
+                        <button id="register-btn" class="ticket-button" type="button">
+                            <?= $isRegistered ? 'Cancel Registration' : 'Register' ?>
+                        </button>
+                    </form>
+
+                    <div id="message" style="margin-top:10px;color:green;"></div>
+
                 </div>
 
-                <div class="ticket-info">
-                    <?= $event['capacity'] ?> spots available
-                </div>
-
-                <button class="ticket-button">
-                    Register
-                </button>
-
-            </div>
-
-        </aside>
+            </aside>
+       <?php endif; ?> 
 
     </div>
 
 </main>
 
 </body>
+<script>
+    const SITE_URL = "<?= SITE_URL ?>";
+</script>
+<script src="<?= SITE_URL ?>/assets/js/registration.js"></script>
 </html>
