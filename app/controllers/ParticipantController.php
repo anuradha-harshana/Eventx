@@ -10,7 +10,11 @@ class ParticipantController extends Controller {
     }
 
     public function profile(){
-        $this->view('participant/profile');
+        $participant_id = $this->getParticipantId();
+        $profile = $this->parModel->getProfile($participant_id);
+        $this->view('participant/profile', [
+            'profile' => $profile
+        ]);
     }
     private function getParticipantId(){
         return $this->parModel->getParticipantByUserId($_SESSION['user_id']);

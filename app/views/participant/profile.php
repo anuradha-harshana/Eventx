@@ -1,35 +1,78 @@
-<link rel="stylesheet" href="<?= SITE_URL ?>assets/css/profile.css">
+<?php if(!empty($profile)): ?>
+    <link rel="stylesheet" href="<?= SITE_URL ?>/assets/css/profile.css">
 
-<form method="POST" action="<?=SITE_URL ?>participant/update" enctype="multipart/form-data">
-    <div class="organizer-details">
+<div class="profile-wrapper">
 
-        <label>Date of Birth</label>
-        <input type="date" name="date_of_birth">
+    <form method="POST" action="<?=SITE_URL ?>participant/update" enctype="multipart/form-data" class="profile-card">
 
-        <label>Location</label>
-        <input type="text" placeholder="Homagama" name="location">
+        <div class="profile-header">
+            <div class="avatar-section">
+                <div class="avatar-preview">
+                    <img src="<?= htmlspecialchars(SITE_URL.ltrim($profile['profile_pic'], '/') ?? '/assets/images/default-profile.png') ?>" alt="Profile Picture" class="profile-pic">
+                </div>
+                <label class="upload-btn">
+                    Change Photo
+                    <input type="file" name="profile_pic" hidden>
+                </label>
+            </div>
 
-        <label>Bio</label>
-        <textarea name="bio" placeholder="asdas asdas asdasd asdasd"></textarea>
+            <div class="profile-title">
+                <h2>My Profile</h2>
+                <p>Manage your personal information</p>
+            </div>
+        </div>
 
-        <label>Interests</label>
-        <input type="text" placeholder="tech" name="interests">
+        <div class="profile-body">
 
-        <label>Occupation</label>
-        <input type="text" placeholder="Student" name="occupation">
+            <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" name="date_of_birth" value="<?= $profile['date_of_birth'] ?>">
+            </div>
 
-        <label>Company</label>
-        <input type="text" placeholder="none" name="company">
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" name="location" placeholder="City, Country" value="<?= $profile['location'] ?>">
+            </div>
 
-        <label>Education</label>
-        <input type="text" placeholder="Undergraduate" name="education">
+            <div class="form-group full-width">
+                <label>Bio</label>
+                <textarea name="bio" rows="4" placeholder="<?= $profile['bio'] ?>"></textarea>
+            </div>
 
-        <label>Phone</label>
-        <input type="text" placeholder="077 80 90 876" name="phone">
+            <div class="form-group">
+                <label>Interests</label>
+                <input type="text" name="interests" placeholder="Tech, Music, Business" value="<?= $profile['interests'] ?>">
+            </div>
 
-        <label>Profile Pic</label>
-        <input type="file" name="profile_pic">
+            <div class="form-group">
+                <label>Occupation</label>
+                <input type="text" name="occupation" value="<?= $profile['occupation'] ?>">
+            </div>
 
-        <button type="submit">Update</button>
-    </div>
-</form>
+            <div class="form-group">
+                <label>Company</label>
+                <input type="text" name="company" value="<?= $profile['company'] ?>">
+            </div>
+
+            <div class="form-group">
+                <label>Education</label>
+                <input type="text" name="education" value="<?= $profile['education'] ?>">
+            </div>
+
+            <div class="form-group">
+                <label>Phone</label>
+                <input type="text" name="phone" value="<?= $profile['phone'] ?>">
+            </div>
+
+        </div>
+
+        <div class="profile-footer">
+            <button type="submit" class="btn-primary">Save Changes</button>
+        </div>
+
+    </form>
+
+</div>
+<?php else: ?>
+    echo "No profile found";    
+<?php endif; ?>
