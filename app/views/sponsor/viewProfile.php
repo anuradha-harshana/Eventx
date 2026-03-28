@@ -145,79 +145,6 @@
                 </div>
             </div>
         </section>
-
-        <!-- Portfolio Section -->
-        <section class="section portfolio-section">
-            <div class="section-header">
-                <h2>My Portfolio</h2>
-                <a href="<?= SITE_URL ?>sponAddPortfolio" class="btn-add">+ Add Item</a>
-            </div>
-
-            <?php if(empty($portfolioItems)): ?>
-                <div class="empty-portfolio">
-                    <div class="empty-icon">📁</div>
-                    <p>No portfolio items yet</p>
-                    <a href="<?= SITE_URL ?>sponAddPortfolio" class="btn-secondary">Create Your First Portfolio Item</a>
-                </div>
-            <?php else: ?>
-                <div class="portfolio-list">
-                    <?php foreach($portfolioItems as $item): ?>
-                        <div class="portfolio-item">
-                            <div class="item-image">
-                                <?php 
-                                    // Try banner first, then image, then logo
-                                    $itemImg = null;
-                                    foreach(['banner_url', 'image_url', 'logo_url'] as $imgField) {
-                                        if(!empty($item[$imgField])) {
-                                            $itemImg = $item[$imgField];
-                                            break;
-                                        }
-                                    }
-                                ?>
-                                <?php if($itemImg): ?>
-                                    <?php 
-                                        if(!str_starts_with($itemImg, '/uploads/')) {
-                                            $itemImg = 'uploads/portfolio/' . basename($itemImg);
-                                        }
-                                    ?>
-                                    <img src="<?= SITE_URL . ltrim($itemImg, '/') ?>" alt="<?= htmlspecialchars($item['title']) ?>" onerror="this.style.display='none'">
-                                <?php else: ?>
-                                    <div class="image-placeholder">📸</div>
-                                <?php endif; ?>
-                                <span class="item-status status-<?= strtolower($item['status'] ?? 'pending') ?>">
-                                    <?= ucfirst($item['status'] ?? 'pending') ?>
-                                </span>
-                            </div>
-
-                            <div class="item-details">
-                                <h3><?= htmlspecialchars($item['title']) ?></h3>
-                                <p class="item-category">📁 <?= htmlspecialchars($item['sponsorship_category'] ?? 'Uncategorized') ?></p>
-
-                                <?php if(!empty($item['event_name'])): ?>
-                                    <p class="item-event">📍 <?= htmlspecialchars($item['event_name']) ?> • <?= htmlspecialchars($item['year'] ?? '') ?></p>
-                                <?php endif; ?>
-
-                                <?php if(!empty($item['brand_description'])): ?>
-                                    <p class="item-description">
-                                        <?= htmlspecialchars(substr($item['brand_description'], 0, 150)) ?>
-                                        <?php if(strlen($item['brand_description']) > 150): ?>...<?php endif; ?>
-                                    </p>
-                                <?php endif; ?>
-
-                                <div class="item-actions">
-                                    <a href="<?= SITE_URL ?>sponPortfolio" class="action-link view">👁 View All</a>
-                                    <a href="<?= SITE_URL ?>sponEditPortfolio?id=<?= $item['id'] ?>" class="action-link edit">✎ Edit</a>
-                                    <form method="POST" action="<?= SITE_URL ?>sponsor/deletePortfolio" style="display:inline;" onsubmit="return confirm('Delete this portfolio item?')">
-                                        <input type="hidden" name="portfolio_id" value="<?= $item['id'] ?>">
-                                        <button type="submit" class="action-link delete">🗑 Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endif; ?>
-        </section>
     </div>
 </div>
 
@@ -234,7 +161,6 @@
             <p>Deleting your profile will permanently remove:</p>
             <ul class="delete-list">
                 <li>✗ Your profile information</li>
-                <li>✗ All portfolio items (<?= count($portfolioItems) ?> items)</li>
                 <li>✗ All sponsorship records</li>
                 <li>✗ All related data</li>
             </ul>
