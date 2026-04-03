@@ -35,6 +35,8 @@
 
             //organizer
             '/manageEvent/{id}' => 'EventController@manageEvent',
+            '/eventParticipants/{id}' => 'EventController@allParticipants',
+            '/api/event/{id}/participants' => 'EventController@getParticipants',
         ],
 
         'POST' => [

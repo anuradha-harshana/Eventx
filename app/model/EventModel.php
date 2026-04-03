@@ -7,28 +7,67 @@ class EventModel {
         $this->db = $db->conn;
     }
 
-    // Create event
+    // Create event — returns the new event ID
     public function createEvent($organizerId, $data, $bannerPic = null){
+        $pricingType = isset($data['pricing_type']) && $data['pricing_type'] === 'paid' ? 'paid' : 'free';
+        $capacity    = isset($data['capacity']) && $data['capacity'] !== '' ? (int)$data['capacity'] : null;
+        $validStatuses = ['draft', 'published', 'live', 'completed', 'cancelled'];
+        $status = in_array($data['status'] ?? '', $validStatuses) ? $data['status'] : 'draft';
+
         $stmt = $this->db->prepare("
             INSERT INTO events 
-            (organizer_id, title, description, category_id, location_text, location_map, start_at, end_at, capacity, status, banner_url) 
+            (organizer_id, title, description, category_id, location_text, location_map, start_at, end_at, capacity, pricing_type, status, banner_url) 
             VALUES 
-            (:organizer_id, :title, :description, :category_id, :location_text, :location_link, :start_at, :end_at, :capacity, :status, :banner_url)
+            (:organizer_id, :title, :description, :category_id, :location_text, :location_link, :start_at, :end_at, :capacity, :pricing_type, :status, :banner_url)
         ");
 
-        return $stmt->execute([
+        $stmt->execute([
             'organizer_id' => $organizerId,
-            'title' => $data['title'],
-            'description' => $data['description'],
-            'category_id' => $data['category_id'],
-            'location_text' => $data['location_text'],
-            'location_link' => $data['location_link'],
-            'start_at' => $data['start_at'],
-            'end_at' => $data['end_at'],
-            'capacity' => $data['capacity'],
-            'status' => $data['status'],
-            'banner_url' => $bannerPic,
+            'title'        => $data['title'],
+            'description'  => $data['description'],
+            'category_id'  => $data['category_id'],
+            'location_text'=> $data['location_text'],
+            'location_link'=> $data['location_link'],
+            'start_at'     => $data['start_at'],
+            'end_at'       => $data['end_at'],
+            'capacity'     => $capacity,
+            'pricing_type' => $pricingType,
+            'status'       => $status,
+            'banner_url'   => $bannerPic,
         ]);
+
+        return (int)$this->db->lastInsertId();
+    }
+
+    // Insert ticket types for an event
+    public function createTickets(int $eventId, array $tickets): void {
+        $stmt = $this->db->prepare("
+            INSERT INTO event_tickets (event_id, name, price, capacity, available_count, terms)
+            VALUES (:event_id, :name, :price, :capacity, :available_count, :terms)
+        ");
+
+        foreach ($tickets as $ticket) {
+            $cap = max(1, (int)($ticket['capacity'] ?? 1));
+            $stmt->execute([
+                'event_id'        => $eventId,
+                'name'            => $ticket['name'],
+                'price'           => (float)($ticket['price'] ?? 0),
+                'capacity'        => $cap,
+                'available_count' => $cap,
+                'terms'           => isset($ticket['terms']) && $ticket['terms'] !== '' ? $ticket['terms'] : null,
+            ]);
+        }
+    }
+
+    // Fetch active ticket types for an event
+    public function getTicketsByEvent(int $eventId): array {
+        $stmt = $this->db->prepare("
+            SELECT * FROM event_tickets
+            WHERE event_id = :event_id AND is_active = TRUE
+            ORDER BY id ASC
+        ");
+        $stmt->execute(['event_id' => $eventId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getEventDetails($eventId)
@@ -379,6 +418,67 @@ class EventModel {
 
         $searchTerm = '%' . trim($keyword) . '%';
         $stmt->execute(['keyword' => $searchTerm]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    //event itinerary management
+    public function addItineraryItem($eventId, $data) {
+        $stmt = $this->db->prepare("
+            INSERT INTO event_itinerary 
+            (event_id, title, description, start_time, end_time, location, speaker, order_index, status)
+            VALUES 
+            (:event_id, :title, :description, :start_time, :end_time, :location, :speaker, :order_index, :status)
+        ");
+
+        return $stmt->execute([
+            'event_id'    => $eventId,
+            'title'       => $data['title'],
+            'description' => $data['description'] ?? null,
+            'start_time'  => $data['start_time'],
+            'end_time'    => $data['end_time'],
+            'location'    => $data['location'] ?? null,
+            'speaker'     => $data['speaker'] ?? null,
+            'order_index' => $data['order_index'] ?? 0,
+            'status'      => $data['status'] ?? 'scheduled',
+        ]);
+    }
+
+    public function getItineraryItemById($itemId, $eventId) {
+        $stmt = $this->db->prepare("
+            SELECT * FROM event_itinerary
+            WHERE id = :id AND event_id = :event_id
+            LIMIT 1
+        ");
+
+        $stmt->execute([
+            'id'       => $itemId,
+            'event_id' => $eventId,
+        ]);
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function removeItineraryItem($itemId, $eventId) {
+        $stmt = $this->db->prepare("
+            DELETE FROM event_itinerary 
+            WHERE id = :id AND event_id = :event_id
+        ");
+
+        return $stmt->execute([
+            'id'       => $itemId,
+            'event_id' => $eventId,
+        ]);
+    }
+
+    public function getItineraryItems($eventId) {
+        $stmt = $this->db->prepare("
+            SELECT * FROM event_itinerary
+            WHERE event_id = :event_id
+            ORDER BY order_index ASC, start_time ASC
+        ");
+
+        $stmt->execute(['event_id' => $eventId]);
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

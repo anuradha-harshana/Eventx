@@ -147,6 +147,7 @@ CREATE TABLE IF NOT EXISTS events (
     end_at DATETIME NOT NULL,
     banner_url VARCHAR(255) DEFAULT 'default-event.jpg',
     capacity INT DEFAULT NULL,
+    pricing_type ENUM('free', 'paid') DEFAULT 'free',
     current_participants INT DEFAULT 0,
     status ENUM('draft', 'pending', 'published', 'live', 'completed', 'cancelled') DEFAULT 'draft',
     checkin_code VARCHAR(10) UNIQUE,
@@ -157,6 +158,22 @@ CREATE TABLE IF NOT EXISTS events (
     INDEX idx_status (status),
     INDEX idx_start_date (start_at),
     INDEX idx_category (category_id)
+);
+
+-- EVENT TICKETS (Ticket types per event)
+CREATE TABLE IF NOT EXISTS event_tickets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    capacity INT NOT NULL,
+    available_count INT NOT NULL,
+    terms TEXT DEFAULT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+    INDEX idx_event_tickets_event (event_id)
 );
 
 -- EVENT COLLABORATIONS (Multiple organizers per event)
@@ -171,6 +188,25 @@ CREATE TABLE IF NOT EXISTS event_collaborations (
     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
     FOREIGN KEY (organizer_id) REFERENCES organizer_details(id) ON DELETE CASCADE,
     UNIQUE KEY unique_collaboration (event_id, organizer_id)
+);
+
+-- EVENT ITINERARY (Schedule items for an event)
+CREATE TABLE IF NOT EXISTS event_itinerary (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    event_id INT NOT NULL,
+    title VARCHAR(200) NOT NULL,
+    description TEXT DEFAULT NULL,
+    start_time DATETIME NOT NULL,
+    end_time DATETIME NOT NULL,
+    location VARCHAR(255) DEFAULT NULL,
+    speaker VARCHAR(100) DEFAULT NULL,
+    order_index INT DEFAULT 0,
+    status ENUM('scheduled', 'in_progress', 'completed', 'cancelled') DEFAULT 'scheduled',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+    INDEX idx_itinerary_event (event_id),
+    INDEX idx_itinerary_order (event_id, order_index)
 );
 
 -- ============================================

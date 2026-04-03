@@ -20,14 +20,16 @@ INSERT INTO users (id, username, email, password, role, full_name, phone, is_act
 (8,  'globalbrand',   'events@globalbrand.com',   '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'sponsor',     'Global Brand Ltd.',    '+1-555-300-0002', TRUE),
 -- Suppliers
 (9,  'cateringpro',   'hello@cateringpro.com',    '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'supplier',    'Catering Pro LLC',     '+1-555-400-0001', TRUE),
-(10, 'avsolutions',   'info@avsolutions.com',     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'supplier',    'AV Solutions Ltd.',    '+1-555-400-0002', TRUE);
+(10, 'avsolutions',   'info@avsolutions.com',     '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'supplier',    'AV Solutions Ltd.',    '+1-555-400-0002', TRUE),
+(11, 'org',            'org@gmail.com',             '$2y$12$QiJkNSFkgprZirsaNpYRT.JqOecwyByVDKGCTJWQs3yHl6sxexO2.', 'organizer',   'Org User',             NULL,              TRUE);
 
 -- ── 2. ROLE-SPECIFIC DETAIL TABLES ───────────────────────────────────────────
 
 -- Organizer details (id=1 → user 2, id=2 → user 3)
 INSERT INTO organizer_details (id, user_id, organization_name, organization_type, description, website, contact_email, contact_phone, founded_year, verified) VALUES
 (1, 2, 'Tech Events Co.',   'company',   'Premier technology events, conferences and hackathons.', 'https://techevents.example.com', 'tech@eventz.com', '+1-555-100-0001', 2018, TRUE),
-(2, 3, 'Arts & Culture Hub','nonprofit', 'Celebrating creativity through art, music and culture.',  'https://artsculture.example.com', 'arts@eventz.com', '+1-555-100-0002', 2015, TRUE);
+(2, 3, 'Arts & Culture Hub','nonprofit', 'Celebrating creativity through art, music and culture.',  'https://artsculture.example.com', 'arts@eventz.com', '+1-555-100-0002', 2015, TRUE),
+(3, 11, 'Org User',         'individual', NULL, NULL, 'org@gmail.com', NULL, NULL, FALSE);
 
 -- Participant details (id=1–3 → users 4–6)
 INSERT INTO participant_details (id, user_id, date_of_birth, location, bio, interests, occupation) VALUES

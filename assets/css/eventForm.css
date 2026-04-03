@@ -47,9 +47,16 @@ form {
     margin-bottom: 8px;
 }
 
+/* Form Groups */
+.form-group {
+    margin-bottom: 20px;
+}
+
 /* Inputs */
 .organizer-details input[type="text"],
+.organizer-details input[type="number"],
 .organizer-details input[type="date"],
+.organizer-details input[type="datetime-local"],
 .organizer-details select,
 .organizer-details textarea {
     width: 100%;
@@ -114,8 +121,111 @@ form {
 .organizer-details input[name="start_at"],
 .organizer-details input[name="end_at"] { width: 100%; }
 
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+}
+
 /* Responsive */
 @media (max-width: 880px) {
     .organizer-details { padding: 20px; }
     .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ── Ticket Section ──────────────────────────────────────── */
+.ticket-section {
+    margin-bottom: 16px;
+}
+
+.ticket-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.ticket-section-label {
+    font-size: 13px;
+    color: #475569;
+    font-weight: 600;
+}
+
+.add-ticket-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px dashed #ff6200;
+    background: #fff5f0;
+    color: #ff6200;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.add-ticket-btn:hover {
+    background: #ff6200;
+    color: #fff;
+    border-style: solid;
+}
+
+.ticket-row {
+    background: #f8fafc;
+    border: 1px solid #e6eef6;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 10px;
+}
+
+.ticket-row-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 12px;
+    align-items: start;
+}
+
+.remove-ticket-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 12px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    background: #fee2e2;
+    color: #ef4444;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+}
+
+.remove-ticket-btn:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+.ticket-total {
+    text-align: right;
+    font-size: 13px;
+    color: #475569;
+    margin-top: 4px;
+    padding: 8px 0;
+    border-top: 1px solid #eef2f7;
+}
+
+.ticket-total strong {
+    color: #ff6200;
+    font-size: 15px;
+}
+
+@media (max-width: 880px) {
+    .ticket-row-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 560px) {
+    .ticket-row-grid { grid-template-columns: 1fr; }
 }

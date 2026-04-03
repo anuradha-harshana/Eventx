@@ -50,7 +50,7 @@
     margin-bottom: 20px;
 }
 
-.participants-row .manage-participants {
+.participants-row .get-attendance {
     flex: 2;   /* registered list gets more space */
     margin-bottom: 0;
 }
@@ -61,7 +61,7 @@
 }
 
 /* ── Shared section card ──────────────────────────────────────────────── */
-.manage-participants,
+.get-attendance,
 .invite-participants,
 .event-chat {
     background: #fff;
@@ -86,15 +86,15 @@
     margin: 0;
 }
 
-.participant-count {
-    font-size: 0.8rem;
-    color: #6b7280;
-    background: #f3f4f6;
-    padding: 2px 10px;
-    border-radius: 99px;
-}
+
 
 /* ── Participant list ───────────────────────────────────────────────────── */
+
+.view-all-participants-row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
 .participant-list {
     display: flex;
     flex-direction: column;
@@ -104,7 +104,8 @@
 .participant-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 16px;
     padding: 10px 14px;
     background: #f9fafb;
     border-radius: 8px;
@@ -166,6 +167,7 @@
     font-weight: 500;
     cursor: pointer;
     transition: background 0.2s;
+    text-decoration: none;
 }
 
 .invite-btn:hover {
@@ -190,4 +192,23 @@
     color: #9ca3af;
     text-align: center;
     margin: 0;
+}
+
+
+/* ── itinerary ────────────────────────────────────────────────────────── */
+
+.addToItinerary-btn {
+    padding: 9px 20px;
+    background: #111827;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.addToItinerary-btn:hover {
+    background: #111827;
 }
