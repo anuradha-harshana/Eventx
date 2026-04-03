@@ -32,13 +32,13 @@
             <p style="margin: 0; opacity: 0.9; font-size: 14px;">View your sponsorship stats</p>
         </div>
 
-        <!-- Explore Card -->
+        <!-- Promote Card -->
         <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 12px; padding: 30px; color: white; text-align: center; cursor: pointer; transition: transform 0.3s ease; box-shadow: 0 4px 15px rgba(250, 112, 154, 0.3);" 
              onmouseover="this.style.transform='translateY(-5px)'" 
              onmouseout="this.style.transform='translateY(0)'"
-             onclick="window.location.href='<?= SITE_URL ?>explore'">
+             onclick="window.location.href='<?= SITE_URL ?>promote'">
             <div style="font-size: 40px; margin-bottom: 15px;">🔍</div>
-            <h3 style="margin: 0 0 10px 0; font-weight: 600;">Explore</h3>
+            <h3 style="margin: 0 0 10px 0; font-weight: 600;">Promote</h3>
             <p style="margin: 0; opacity: 0.9; font-size: 14px;">Find events to sponsor</p>
         </div>
     </div>

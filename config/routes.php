@@ -13,7 +13,7 @@
             '/adRep' => 'AdminController@reports',
             '/adSet' => 'AdminController@settings',
             '/parDash' => 'ParticipantController@dashboard',
-            '/explore' => 'ViewController@explore',
+            '/promote' => 'ViewController@promote',
             '/myEvents' => 'ParticipantController@events',
             '/parProf' => 'ParticipantController@profile',
             '/orgDash' => 'OrganizerController@dashboard',

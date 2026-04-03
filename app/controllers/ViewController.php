@@ -17,7 +17,7 @@
             //echo 'Controller hit';
             $this->view('register');
         }
-        public function explore(){
+        public function promote(){
             $filter = $_GET['filter'] ?? 'all';
             $category = $_GET['category'] ?? null;
             $location = $_GET['location'] ?? null;
@@ -44,7 +44,7 @@
                 $events = $this->eventModel->getUpcomingEvents();
             }
             
-            $this->view('explore', [
+            $this->view('promote', [
                 'events' => $events,
                 'categories' => $categories,
                 'activeFilter' => $filter,
