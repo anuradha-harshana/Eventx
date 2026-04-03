@@ -50,10 +50,7 @@ if ($current_route === '' || $current_route === 'Eventx') {
                 </div>
 
             <?php elseif($_SESSION['role'] === 'participant'): ?>
-                <ul class="nav-list">
-                    <li><a class="nav-item <?= $current_route === 'parDash' ? 'active' : '' ?>" href="<?= SITE_URL ?>parDash">Dashboard</a></li>
-                    <li><a class="nav-item <?= $current_route === 'explore' ? 'active' : '' ?>" href="<?= SITE_URL ?>explore">Explore</a></li>
-                    <li><a class="nav-item <?= $current_route === 'myEvents' ? 'active' : '' ?>" href="<?= SITE_URL ?>myEvents">My Events</a></li>
+                    <li><a class="nav-item <?= $current_route === 'promote' ? 'active' : '' ?>" href="<?= SITE_URL ?>promote">Promote</a></li>
                     <li><a class="nav-item <?= $current_route === 'parProf' ? 'active' : '' ?>" href="<?= SITE_URL ?>parProf">Profile</a></li>
                 </ul>
                 <div class="nav-buttons">
@@ -65,7 +62,7 @@ if ($current_route === '' || $current_route === 'Eventx') {
             <?php elseif($_SESSION['role'] === 'organizer'): ?>
                 <ul class="nav-list">
                     <li><a class="nav-item <?= $current_route === 'orgDash' ? 'active' : '' ?>" href="<?= SITE_URL ?>orgDash">Dashboard</a></li>
-                    <li><a class="nav-item <?= $current_route === 'explore' ? 'active' : '' ?>" href="<?= SITE_URL ?>explore">Explore</a></li>
+                    <li><a class="nav-item <?= $current_route === 'promote' ? 'active' : '' ?>" href="<?= SITE_URL ?>promote">Promote</a></li>
                     <li><a class="nav-item <?= $current_route === 'market' ? 'active' : '' ?>" href="<?= SITE_URL ?>market">Market</a></li>
                     <li><a class="nav-item <?= $current_route === 'orgSpon' ? 'active' : '' ?>" href="<?= SITE_URL ?>orgSpon">Sponsors</a></li>
                     <li><a class="nav-item <?= $current_route === 'orgAna' ? 'active' : '' ?>" href="<?= SITE_URL ?>orgAna">Analytics</a></li>
@@ -80,8 +77,8 @@ if ($current_route === '' || $current_route === 'Eventx') {
             <?php elseif($_SESSION['role'] === 'sponsor'): ?>
                 <ul class="nav-list">
                     <li><a class="nav-item <?= $current_route === 'sponDash' ? 'active' : '' ?>" href="<?= SITE_URL ?>sponDash">Dashboard</a></li>
-                    <li><a class="nav-item <?= $current_route === 'explore' ? 'active' : '' ?>" href="<?= SITE_URL ?>explore">Explore</a></li>
-                    <li><a class="nav-item <?= $current_route === 'market' ? 'active' : '' ?>" href="<?= SITE_URL ?>market">Market</a></li>
+                    <li><a class="nav-item <?= $current_route === 'promote' ? 'active' : '' ?>" href="<?= SITE_URL ?>promote">Promote</a></li>
+                    <li><a class="nav-item <?= in_array($current_route, ['sponRequests', 'sponRequest']) ? 'active' : '' ?>" href="<?= SITE_URL ?>sponRequests">Requests</a></li>
                     <li><a class="nav-item <?= $current_route === 'sponAna' ? 'active' : '' ?>" href="<?= SITE_URL ?>sponAna">Analytics</a></li>
                     <li><a class="nav-item <?= $current_route === 'sponProf' ? 'active' : '' ?>" href="<?= SITE_URL ?>sponProf">Profile</a></li>
                 </ul>
@@ -94,7 +91,7 @@ if ($current_route === '' || $current_route === 'Eventx') {
             <?php elseif($_SESSION['role'] === 'supplier'): ?>
                 <ul class="nav-list">
                     <li><a class="nav-item <?= $current_route === 'suppDash' ? 'active' : '' ?>" href="<?= SITE_URL ?>suppDash">Dashboard</a></li>
-                    <li><a class="nav-item <?= $current_route === 'explore' ? 'active' : '' ?>" href="<?= SITE_URL ?>explore">Explore</a></li>
+                    <li><a class="nav-item <?= $current_route === 'promote' ? 'active' : '' ?>" href="<?= SITE_URL ?>promote">Promote</a></li>
                     <li><a class="nav-item <?= $current_route === 'market' ? 'active' : '' ?>" href="<?= SITE_URL ?>market">Market</a></li>
                     <li><a class="nav-item <?= $current_route === 'suppAna' ? 'active' : '' ?>" href="<?= SITE_URL ?>suppAna">Analytics</a></li>
                     <li><a class="nav-item <?= $current_route === 'suppProf' ? 'active' : '' ?>" href="<?= SITE_URL ?>suppProf">Profile</a></li>
