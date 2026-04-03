@@ -73,23 +73,29 @@ class UserModel {
 
                 case 'sponsor':
                     $stmt = $this->db->prepare("
-                        INSERT INTO sponsor_details (user_id) 
-                        VALUES (:user_id)
+                        INSERT INTO sponsor_details (user_id, brand_name) 
+                        VALUES (:user_id, :brand_name)
                     ");
+                    $stmt->execute(['user_id' => $userId, 'brand_name' => $data['username']]);
+                    $stmt = null;
                     break;
                 
                 case 'supplier':
                     $stmt = $this->db->prepare("
-                        INSERT INTO supplier_details (user_id) 
-                        VALUES (:user_id)
+                        INSERT INTO supplier_details (user_id, company_name) 
+                        VALUES (:user_id, :company_name)
                     ");
+                    $stmt->execute(['user_id' => $userId, 'company_name' => $data['username']]);
+                    $stmt = null;
                     break;    
 
                 default:
                     throw new Exception("Invalid user role.");
             }
 
-            $stmt->execute(['user_id' => $userId]);
+            if ($stmt !== null) {
+                $stmt->execute(['user_id' => $userId]);
+            }
 
             $this->db->commit();
 
