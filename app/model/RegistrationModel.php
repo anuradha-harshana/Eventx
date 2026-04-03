@@ -48,6 +48,39 @@
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        public function getParticipantsByEvent($eventId)
+        {
+            $stmt = $this->db->prepare("
+                SELECT
+                    r.id              AS registration_id,
+                    r.registration_date,
+                    r.status          AS registration_status,
+                    r.checkin_time,
+                    r.checkin_method,
+                    r.feedback,
+                    r.rating,
+                    u.full_name,
+                    u.username,
+                    u.email,
+                    COALESCE(pd.profile_pic, u.profile_pic) AS profile_pic,
+                    pd.phone,
+                    pd.date_of_birth,
+                    pd.location,
+                    pd.occupation,
+                    pd.company,
+                    pd.education,
+                    pd.bio,
+                    pd.badges_earned
+                FROM registrations r
+                JOIN participant_details pd ON r.participant_id = pd.id
+                JOIN users u ON pd.user_id = u.id
+                WHERE r.event_id = :event_id
+                ORDER BY u.full_name ASC
+            ");
+            $stmt->execute(['event_id' => $eventId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
     }
 
 ?>

@@ -26,14 +26,32 @@ class EventController extends Controller {
                 $uploader = new FileUploader(__DIR__ . '/../../uploads/events/');
                 $bannerPic = $uploader->upload($_FILES['banner_url'], 'banner_');
             } catch (Exception $e) {
-                // Handle upload error gracefully
                 $_SESSION['upload_error'] = $e->getMessage();
                 header('Location: ' . SITE_URL . 'orgDash');
                 exit;
             }
         }
 
-        $this->eventModel->createEvent($organizerId, $_POST, $bannerPic);
+        $eventId     = $this->eventModel->createEvent($organizerId, $_POST, $bannerPic);
+        $pricingType = isset($_POST['pricing_type']) && $_POST['pricing_type'] === 'paid' ? 'paid' : 'free';
+
+        if ($pricingType === 'paid') {
+            // Persist each named ticket type
+            if (!empty($_POST['tickets']) && is_array($_POST['tickets'])) {
+                $this->eventModel->createTickets($eventId, $_POST['tickets']);
+            }
+        } else {
+            // Free event — create a single "Free Admission" ticket using the supplied count
+            $freeCapacity = isset($_POST['capacity']) && $_POST['capacity'] !== '' ? (int)$_POST['capacity'] : 0;
+            if ($freeCapacity > 0) {
+                $this->eventModel->createTickets($eventId, [[
+                    'name'     => 'Free Admission',
+                    'price'    => 0.00,
+                    'capacity' => $freeCapacity,
+                    'terms'    => null,
+                ]]);
+            }
+        }
 
         header('Location: ' . SITE_URL . 'orgDash');
         exit;
@@ -82,6 +100,47 @@ class EventController extends Controller {
         exit;
     }
 
+    public function allParticipants($id = null)
+    {
+        $id = (int) $id;
+        if ($id <= 0) {
+            header('Location: ' . SITE_URL . 'orgDash');
+            exit;
+        }
+
+        $organizerId = $this->getOrganizerId();
+        $event = $this->eventModel->getEventById($id, $organizerId);
+
+        if (!$event) {
+            header('Location: ' . SITE_URL . 'orgDash');
+            exit;
+        }
+
+        $registrationModel = $this->model('RegistrationModel');
+        $participants = $registrationModel->getParticipantsByEvent($id);
+
+        $this->view('organizer/allParticipants', [
+            'event'        => $event,
+            'participants' => $participants,
+        ]);
+    }
+
+    public function getParticipants($id = null)
+    {
+        header('Content-Type: application/json');
+
+        $id = (int) $id;
+        if ($id <= 0) {
+            echo json_encode(['success' => false, 'message' => 'Invalid event ID']);
+            return;
+        }
+
+        $registrationModel = $this->model('RegistrationModel');
+        $participants = $registrationModel->getParticipantsByEvent($id);
+
+        echo json_encode(['success' => true, 'participants' => $participants]);
+    }
+
     public function manageEvent($id = null)
     {
         $id = (int) $id;
@@ -103,5 +162,10 @@ class EventController extends Controller {
 
         $this->view('organizer/manageEvent', ['event' => $event]);
     }
+
+
+     //event itinerary management
+
+
 
 }
