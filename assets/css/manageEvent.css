@@ -195,9 +195,7 @@
 }
 
 
-/* ── itinerary ────────────────────────────────────────────────────────── */
-
-.addToItinerary-btn {
+/* ── itinerary ────────────────────────────────────────────────────────── */.addToItinerary-btn {
     padding: 9px 20px;
     background: #111827;
     color: #fff;
@@ -210,5 +208,426 @@
 }
 
 .addToItinerary-btn:hover {
+    background: #374151;
+}
+
+/* ── Itinerary list ────────────────────────────────────────────────────── */
+.itinerary-section {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 20px 24px;
+}
+
+.itinerary-item {
+    display: flex;
+    gap: 16px;
+    padding: 12px 14px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    animation: slideIn 0.2s ease;
+}
+
+.itin-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 120px;
+    width: 120px;
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+
+.itin-date {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #374151;
+    word-break: break-word;
+}
+
+.itin-clock {
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: #9ca3af;
+    white-space: nowrap;
+}
+
+.itin-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.itin-title {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.itin-details {
+    font-size: 0.82rem;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+.itin-location {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-top: 3px;
+}
+
+.itin-remove-btn {
+    margin-left: auto;
+    align-self: flex-start;
+    background: none;
+    border: none;
+    font-size: 1.15rem;
+    color: #d1d5db;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 2px;
+    transition: color 0.15s;
+    flex-shrink: 0;
+}
+
+.itin-remove-btn:hover { color: #dc2626; }
+
+@keyframes itinOut {
+    to { opacity: 0; transform: translateX(16px); max-height: 0; margin: 0; padding: 0; }
+}
+
+.itin-removing {
+    animation: itinOut 0.2s ease forwards;
+    overflow: hidden;
+}
+
+/* ── Modal overlay ─────────────────────────────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    width: 100%;
+    max-width: 480px;
+    animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+    from { opacity: 0; transform: translateY(-16px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 0;
+}
+
+.modal-header h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.4rem;
+    color: #9ca3af;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+    transition: color 0.15s;
+}
+
+.modal-close:hover { color: #111827; }
+
+.modal-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.itin-time-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.form-group .optional {
+    font-weight: 400;
+    color: #9ca3af;
+}
+
+.form-control {
+    padding: 9px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    color: #111827;
+    resize: vertical;
+}
+
+.form-control:focus {
+    border-color: #111827;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding-top: 4px;
+}
+
+.btn-primary {
+    padding: 9px 22px;
     background: #111827;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover { background: #374151; }
+
+.btn-secondary {
+    padding: 9px 22px;
+    background: #f1f5f9;
+    color: #374151;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover { background: #e2e8f0; }
+
+/* ── Check-in section ──────────────────────────────────────────────────── */
+.checkin-stats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.stat-badge {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #111827;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 3px 12px;
+}
+
+.stat-badge.stat-total {
+    color: #6b7280;
+}
+
+.stat-sep {
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.checkin-input-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.checkin-code-input {
+    flex: 1;
+    padding: 10px 16px;
+    font-size: 1.05rem;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 2px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s;
+    color: #111827;
+}
+
+.checkin-code-input:focus {
+    border-color: #111827;
+}
+
+.checkin-btn {
+    padding: 10px 24px;
+    background: #111827;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, opacity 0.2s;
+}
+
+.checkin-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* Result flash */
+.checkin-result {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.checkin-result.hidden { display: none; }
+
+.checkin-result.success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+}
+
+.checkin-result.error {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    color: #9f1239;
+}
+
+.checkin-result.warn {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #92400e;
+}
+
+.checkin-result-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.checkin-result-body .result-name {
+    font-weight: 700;
+}
+
+.checkin-result-body .result-sub {
+    font-size: 0.82rem;
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
+/* Log */
+.checkin-log-header {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+}
+
+.checkin-log {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.checkin-log-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    animation: slideIn 0.25s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.checkin-log-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+}
+
+.checkin-log-icon.ok  { background: #dcfce7; color: #16a34a; }
+.checkin-log-icon.dup { background: #fef9c3; color: #a16207; }
+.checkin-log-icon.err { background: #fee2e2; color: #dc2626; }
+
+.checkin-log-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.checkin-log-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #111827;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.checkin-log-meta {
+    font-size: 0.76rem;
+    color: #6b7280;
+}
+
+.checkin-log-time {
+    font-size: 0.76rem;
+    color: #9ca3af;
+    white-space: nowrap;
+    flex-shrink: 0;
 }

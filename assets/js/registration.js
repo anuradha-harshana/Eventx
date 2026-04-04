@@ -1,4 +1,6 @@
-document.getElementById('register-btn').addEventListener('click', function() {
+/* ── Free event registration ───────────────────────────── */
+const registerBtn = document.getElementById('register-btn');
+if (registerBtn) registerBtn.addEventListener('click', function() {
     const btn = this;
     const eventId = document.getElementById('event_id').value;
     const action = btn.textContent.includes('Cancel') ? 'cancel' : 'register';

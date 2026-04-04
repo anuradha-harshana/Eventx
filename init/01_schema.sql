@@ -166,8 +166,8 @@ CREATE TABLE IF NOT EXISTS event_tickets (
     event_id INT NOT NULL,
     name VARCHAR(100) NOT NULL,
     price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    capacity INT NOT NULL,
-    available_count INT NOT NULL,
+    capacity INT DEFAULT NULL,
+    available_count INT DEFAULT NULL,
     terms TEXT DEFAULT NULL,
     is_active BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -199,14 +199,9 @@ CREATE TABLE IF NOT EXISTS event_itinerary (
     start_time DATETIME NOT NULL,
     end_time DATETIME NOT NULL,
     location VARCHAR(255) DEFAULT NULL,
-    speaker VARCHAR(100) DEFAULT NULL,
-    order_index INT DEFAULT 0,
-    status ENUM('scheduled', 'in_progress', 'completed', 'cancelled') DEFAULT 'scheduled',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
-    INDEX idx_itinerary_event (event_id),
-    INDEX idx_itinerary_order (event_id, order_index)
+    INDEX idx_itinerary_event (event_id)
 );
 
 -- ============================================
@@ -230,6 +225,22 @@ CREATE TABLE IF NOT EXISTS registrations (
     FOREIGN KEY (participant_id) REFERENCES participant_details(id) ON DELETE CASCADE,
     UNIQUE KEY unique_registration (event_id, participant_id),
     INDEX idx_status (status)
+);
+
+-- TICKET PURCHASES (Line items for paid registrations)
+CREATE TABLE IF NOT EXISTS ticket_purchases (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    registration_id INT NOT NULL,
+    ticket_id INT NOT NULL,
+    unit_price DECIMAL(10,2) NOT NULL,
+    verify_code CHAR(16) NOT NULL,
+    used_at TIMESTAMP NULL DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_verify_code (verify_code),
+    FOREIGN KEY (registration_id) REFERENCES registrations(id) ON DELETE CASCADE,
+    FOREIGN KEY (ticket_id) REFERENCES event_tickets(id) ON DELETE CASCADE,
+    INDEX idx_tp_registration (registration_id),
+    INDEX idx_tp_ticket (ticket_id)
 );
 
 -- FOLLOWS (Participants following Organizers)

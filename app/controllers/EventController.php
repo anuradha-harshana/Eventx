@@ -41,16 +41,13 @@ class EventController extends Controller {
                 $this->eventModel->createTickets($eventId, $_POST['tickets']);
             }
         } else {
-            // Free event — create a single "Free Admission" ticket using the supplied count
-            $freeCapacity = isset($_POST['capacity']) && $_POST['capacity'] !== '' ? (int)$_POST['capacity'] : 0;
-            if ($freeCapacity > 0) {
-                $this->eventModel->createTickets($eventId, [[
-                    'name'     => 'Free Admission',
-                    'price'    => 0.00,
-                    'capacity' => $freeCapacity,
-                    'terms'    => null,
-                ]]);
-            }
+            // Free event — always insert a "Free Admission" ticket with no capacity limit
+            $this->eventModel->createTickets($eventId, [[
+                'name'     => 'Free Admission',
+                'price'    => 0.00,
+                'capacity' => null,
+                'terms'    => null,
+            ]]);
         }
 
         header('Location: ' . SITE_URL . 'orgDash');
@@ -164,8 +161,147 @@ class EventController extends Controller {
     }
 
 
-     //event itinerary management
+    // ── Itinerary API ────────────────────────────────────────────────────
 
+    public function getItinerary($id = null)
+    {
+        header('Content-Type: application/json');
+        $id = (int)$id;
+        if ($id <= 0) { echo json_encode(['success' => false, 'message' => 'Invalid event ID.']); return; }
 
+        $organizerId = $this->getOrganizerId();
+        if (!$this->eventModel->getEventById($id, $organizerId)) {
+            echo json_encode(['success' => false, 'message' => 'Event not found.']);
+            return;
+        }
+
+        $items = $this->eventModel->getItineraryItems($id);
+        echo json_encode(['success' => true, 'items' => $items]);
+    }
+
+    public function addItinerary($id = null)
+    {
+        header('Content-Type: application/json');
+        $id = (int)$id;
+        if ($id <= 0) { echo json_encode(['success' => false, 'message' => 'Invalid event ID.']); return; }
+
+        $organizerId = $this->getOrganizerId();
+        $event = $this->eventModel->getEventById($id, $organizerId);
+        if (!$event) {
+            echo json_encode(['success' => false, 'message' => 'Event not found.']);
+            return;
+        }
+
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (empty($data['title']) || empty($data['start_time']) || empty($data['end_time'])) {
+            echo json_encode(['success' => false, 'message' => 'Title, start time and end time are required.']);
+            return;
+        }
+
+        // Normalise datetime-local format (YYYY-MM-DDTHH:MM → YYYY-MM-DD HH:MM:SS)
+        $toDatetime = function(string $v): string {
+            $v = str_replace('T', ' ', trim($v));
+            return strlen($v) === 16 ? $v . ':00' : $v;
+        };
+
+        $startDt    = $toDatetime($data['start_time']);
+        $endDt      = $toDatetime($data['end_time']);
+        $eventStart = date('Y-m-d H:i:s', strtotime($event['start_at']));
+        $eventEnd   = date('Y-m-d H:i:s', strtotime($event['end_at']));
+        if ($startDt < $eventStart || $startDt > $eventEnd) {
+            echo json_encode(['success' => false, 'message' => 'Start time is outside the event timeframe.']); return;
+        }
+        if ($endDt < $startDt || $endDt > $eventEnd) {
+            echo json_encode(['success' => false, 'message' => 'End time must be after start and within the event timeframe.']); return;
+        }
+
+        $item = [
+            'title'       => htmlspecialchars(strip_tags($data['title']), ENT_QUOTES),
+            'description' => isset($data['description']) ? htmlspecialchars(strip_tags($data['description']), ENT_QUOTES) : null,
+            'start_time'  => $toDatetime($data['start_time']),
+            'end_time'    => $toDatetime($data['end_time']),
+            'location'    => isset($data['location']) ? htmlspecialchars(strip_tags($data['location']), ENT_QUOTES) : null,
+        ];
+
+        $newId = $this->eventModel->addItineraryItem($id, $item);
+        $item['id'] = $newId;
+        echo json_encode(['success' => true, 'item' => $item]);
+    }
+
+    public function removeItinerary($id = null)
+    {
+        header('Content-Type: application/json');
+        $id = (int)$id;
+        if ($id <= 0) { echo json_encode(['success' => false, 'message' => 'Invalid event ID.']); return; }
+
+        $organizerId = $this->getOrganizerId();
+        if (!$this->eventModel->getEventById($id, $organizerId)) {
+            echo json_encode(['success' => false, 'message' => 'Event not found.']);
+            return;
+        }
+
+        $data    = json_decode(file_get_contents('php://input'), true);
+        $itemId  = isset($data['item_id']) ? (int)$data['item_id'] : 0;
+
+        if ($itemId <= 0) { echo json_encode(['success' => false, 'message' => 'Invalid item ID.']); return; }
+
+        $this->eventModel->removeItineraryItem($itemId, $id);
+        echo json_encode(['success' => true]);
+    }
+
+    public function checkin()
+    {
+        header('Content-Type: application/json');
+
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
+        $data = json_decode(file_get_contents('php://input'), true);
+        $verifyCode = isset($data['verify_code']) ? strtoupper(trim($data['verify_code'])) : '';
+        $eventId    = isset($data['event_id'])    ? (int)$data['event_id']                 : 0;
+
+        if (!$verifyCode || $eventId <= 0) {
+            echo json_encode(['success' => false, 'message' => 'Invalid input.']);
+            return;
+        }
+
+        // Ensure organizer owns this event
+        $organizerId = $this->getOrganizerId();
+        $event = $this->eventModel->getEventById($eventId, $organizerId);
+        if (!$event) {
+            echo json_encode(['success' => false, 'message' => 'Event not found.']);
+            return;
+        }
+
+        $registrationModel = $this->model('RegistrationModel');
+        $result = $registrationModel->checkinByCode($verifyCode, $eventId);
+
+        echo json_encode($result);
+    }
+
+    public function checkinStats($id = null)
+    {
+        header('Content-Type: application/json');
+
+        $id = (int)$id;
+        if ($id <= 0) {
+            echo json_encode(['success' => false, 'message' => 'Invalid event ID.']);
+            return;
+        }
+
+        if (session_status() === PHP_SESSION_NONE) session_start();
+
+        $organizerId = $this->getOrganizerId();
+        $event = $this->eventModel->getEventById($id, $organizerId);
+        if (!$event) {
+            echo json_encode(['success' => false, 'message' => 'Event not found.']);
+            return;
+        }
+
+        $registrationModel = $this->model('RegistrationModel');
+        $stats = $registrationModel->getCheckinStats($id);
+
+        echo json_encode(['success' => true, 'stats' => $stats]);
+    }
 
 }

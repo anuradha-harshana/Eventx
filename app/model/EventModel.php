@@ -47,7 +47,13 @@ class EventModel {
         ");
 
         foreach ($tickets as $ticket) {
-            $cap = max(1, (int)($ticket['capacity'] ?? 1));
+            $isFree = (float)($ticket['price'] ?? 0) == 0.0
+                      && empty($ticket['capacity']);
+
+            $cap = $isFree
+                ? null
+                : max(1, (int)($ticket['capacity'] ?? 1));
+
             $stmt->execute([
                 'event_id'        => $eventId,
                 'name'            => $ticket['name'],
@@ -244,23 +250,22 @@ class EventModel {
     //event itinerary management
     public function addItineraryItem($eventId, $data) {
         $stmt = $this->db->prepare("
-            INSERT INTO event_itinerary 
-            (event_id, title, description, start_time, end_time, location, speaker, order_index, status)
-            VALUES 
-            (:event_id, :title, :description, :start_time, :end_time, :location, :speaker, :order_index, :status)
+            INSERT INTO event_itinerary
+            (event_id, title, description, start_time, end_time, location)
+            VALUES
+            (:event_id, :title, :description, :start_time, :end_time, :location)
         ");
 
-        return $stmt->execute([
+        $stmt->execute([
             'event_id'    => $eventId,
             'title'       => $data['title'],
             'description' => $data['description'] ?? null,
             'start_time'  => $data['start_time'],
             'end_time'    => $data['end_time'],
             'location'    => $data['location'] ?? null,
-            'speaker'     => $data['speaker'] ?? null,
-            'order_index' => $data['order_index'] ?? 0,
-            'status'      => $data['status'] ?? 'scheduled',
         ]);
+
+        return (int)$this->db->lastInsertId();
     }
 
     public function getItineraryItemById($itemId, $eventId) {
@@ -294,7 +299,7 @@ class EventModel {
         $stmt = $this->db->prepare("
             SELECT * FROM event_itinerary
             WHERE event_id = :event_id
-            ORDER BY order_index ASC, start_time ASC
+            ORDER BY start_time ASC
         ");
 
         $stmt->execute(['event_id' => $eventId]);

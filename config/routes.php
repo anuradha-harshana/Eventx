@@ -35,6 +35,9 @@
             '/manageEvent/{id}' => 'EventController@manageEvent',
             '/eventParticipants/{id}' => 'EventController@allParticipants',
             '/api/event/{id}/participants' => 'EventController@getParticipants',
+            '/api/event/{id}/checkin-stats' => 'EventController@checkinStats',
+            '/api/event/{id}/itinerary' => 'EventController@getItinerary',
+            '/payment/checkout' => 'PaymentController@checkout',
         ],
 
         'POST' => [
@@ -54,7 +57,12 @@
             '/viewEvent' => 'ViewController@viewEvent',
             '/registration' => 'ParticipantController@registration',
             '/register' => 'RegistrationController@register',
-            '/cancel' => 'RegistrationController@cancel'
+            '/cancel' => 'RegistrationController@cancel',
+            '/payment/initiate' => 'PaymentController@initiate',
+            '/payment/complete' => 'PaymentController@complete',
+            '/api/checkin' => 'EventController@checkin',
+            '/api/event/{id}/itinerary/add' => 'EventController@addItinerary',
+            '/api/event/{id}/itinerary/remove' => 'EventController@removeItinerary',
         ]
     ]
 ?>

@@ -11,9 +11,7 @@ class Middleware {
     }
 
     public static function role($roles=[]) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        self::auth();
 
         if(!is_array($roles)){
             $roles = [$roles];

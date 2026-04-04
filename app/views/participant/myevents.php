@@ -1,5 +1,17 @@
 <link rel="stylesheet" href="<?= SITE_URL ?>/assets/css/dashboard.css">
 
+<?php if (!empty($_SESSION['flash'])): ?>
+    <?php $flash = $_SESSION['flash']; unset($_SESSION['flash']); ?>
+    <div style="max-width:900px;margin:20px auto 0;padding:0 20px;">
+        <div style="padding:14px 18px;border-radius:10px;font-size:14px;font-weight:500;
+                    background:<?= $flash['type'] === 'success' ? '#dcfce7' : '#fee2e2' ?>;
+                    color:<?= $flash['type'] === 'success' ? '#166534' : '#991b1b' ?>;
+                    border:1px solid <?= $flash['type'] === 'success' ? '#86efac' : '#fca5a5' ?>;">
+            <?= $flash['type'] === 'success' ? '✅' : '❌' ?> <?= htmlspecialchars($flash['message']) ?>
+        </div>
+    </div>
+<?php endif; ?>
+
 <div class="dashboard">
 
     <header class="dashboard-top">
